@@ -1,6 +1,7 @@
 import pygame
 from queue import Queue
 
+pygame.init()
 
 width = 800
 screen = pygame.display.set_mode((width, width))
@@ -17,6 +18,10 @@ ORANGE = (255, 165, 0)
 GREY = (128, 128, 128)
 TURQUISE = (64, 224, 208)
 
+font = pygame.font.Font("freesansbold.ttf",32);
+text = font.render('ENTER Your Choice',True,BLACK)
+textrect = text.get_rect()
+textrect.center = (width//2,width//2)
 
 class Node:
     def __init__(self, row, col, width, total_rows):
@@ -91,6 +96,9 @@ class Node:
             self.neigh.append(grid[self.row][self.col - 1])
 
 
+def choice ():
+	screen.render
+	s = int(input())
 
 
 
@@ -117,6 +125,8 @@ def BFS(draw, grid, start, end):
             end.make_end()
             return True
 
+
+
         for neigh in current.neigh:
             if neigh not in visited:
                 came_from[neigh] = current
@@ -124,6 +134,8 @@ def BFS(draw, grid, start, end):
                 visited.add(neigh)
                 neigh.make_open()
         draw()
+
+        if current!=start:current.make_close()
 
     return False
 
@@ -152,7 +164,8 @@ def DFS(draw, grid, start, end):
           stack.append(neigh);
           neigh.make_open()
           
-      draw();
+      draw()
+      if current!=start:current.make_close()
           
     return False;
 
@@ -180,7 +193,7 @@ def draw_grid(screen, rows, width):
 
 def draw(screen, grid, rows, width):
     screen.fill(WHITE)
-
+    screen.blit(text,textrect)
     for row in grid:
         for spot in row:
             spot.draw(screen)
@@ -249,7 +262,8 @@ def main(screen, width):
                         for node in row:
                             node.update_neigh(grid)
 
-                    DFS(lambda: draw(screen, grid, rows, width), grid, start, end)
+                    BFS(lambda: draw(screen, grid, rows, width), grid, start, end)
+                    #DFS(lambda: draw(screen, grid, rows, width), grid, start, end)
 
                 if event.key == pygame.K_c:
                     start = None
